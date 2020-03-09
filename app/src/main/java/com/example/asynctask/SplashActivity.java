@@ -14,7 +14,6 @@ public class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getName();
     private ProgressBar progressBar;
     private TextView textView;
-    private static int SPLASH_TIME = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +21,11 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         progressBar = findViewById(R.id.progressBar);
+        progressBar.setProgress(0);
+        progressBar.setMax(100);
+
         textView = findViewById(R.id.textView);
+        textView.setText(0 + " %");
         new LoadingProgress().execute();
     }
 
@@ -31,9 +34,9 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             int progressStatus = 0;
-            while (progressStatus < SPLASH_TIME) {
+            while (progressStatus < 100) {
                 try {
-                    Thread.sleep(1);
+                    Thread.sleep(50);
                     publishProgress(progressStatus);
                     progressStatus++;
                 } catch (InterruptedException e) {
@@ -45,10 +48,9 @@ public class SplashActivity extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            Log.d(TAG, String.valueOf(values[0]));
-            int percentage = (values[0] / SPLASH_TIME) * 100;
+            super.onProgressUpdate(values);
             progressBar.setProgress(values[0]);
-            textView.setText(percentage + " %");
+            textView.setText(progressBar.getProgress() + " %");
         }
 
         @Override
